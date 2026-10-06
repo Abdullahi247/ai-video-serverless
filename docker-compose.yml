@@ -1,0 +1,15 @@
+# Local helper — stub backend only (no NVIDIA required on the host).
+# Full GPU inference happens on RunPod after you push the CUDA image.
+
+services:
+  worker-stub:
+    build:
+      context: .
+      dockerfile: Dockerfile.stub
+    environment:
+      - MODEL_BACKEND=stub
+      - OUTPUT_DIR=/tmp/outputs
+    volumes:
+      - ./test_input:/app/test_input
+      - ./src:/app/src
+    command: ["python", "-u", "/app/src/handler.py", "--test_input", "/app/test_input/test_t2v.json"]

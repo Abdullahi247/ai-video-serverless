@@ -1,0 +1,14 @@
+.dockerignore
+.git
+.venv
+__pycache__
+*.pyc
+.DS_Store
+.env
+test_input/out
+*.mp4
+models
+.huggingface
+README.md
+docker-compose.yml
+Dockerfile.stub

@@ -1,0 +1,17 @@
+# Lightweight local image for smoke-testing the RunPod handler contract (no CUDA).
+FROM python:3.11-slim-bookworm
+
+ENV PYTHONUNBUFFERED=1 \
+    MODEL_BACKEND=stub \
+    OUTPUT_DIR=/tmp/outputs
+
+RUN apt-get update && apt-get install -y --no-install-recommends ffmpeg \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+RUN pip install --no-cache-dir runpod imageio imageio-ffmpeg opencv-python-headless Pillow numpy requests
+
+COPY src/ /app/src/
+RUN mkdir -p /tmp/outputs
+
+CMD ["python", "-u", "/app/src/handler.py"]

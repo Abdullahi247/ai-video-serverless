@@ -1,0 +1,12 @@
+{
+  "input": {
+    "prompt": "cinematic football goal celebration, stadium lights, slow motion, vertical phone video",
+    "negative_prompt": "blurry, low quality, watermark, text",
+    "duration_seconds": 3,
+    "width": 720,
+    "height": 1280,
+    "num_inference_steps": 20,
+    "guidance_scale": 5.0,
+    "seed": 42
+  }
+}
