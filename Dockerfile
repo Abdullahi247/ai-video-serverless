@@ -7,7 +7,7 @@
 # Default model path: Wan 2.2 TI2V-5B (fits ~24GB with offload).
 # For MiniMax H3 / LTX-2.5, use a 48GB+ GPU and set MODEL_BACKEND accordingly.
 
-FROM nvidia/cuda:12.1.0-runtime-ubuntu22.04
+FROM nvidia/cuda:12.4.1-runtime-ubuntu22.04
 
 ENV DEBIAN_FRONTEND=noninteractive \
     PYTHONUNBUFFERED=1 \
@@ -44,10 +44,16 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 COPY requirements.txt /app/requirements.txt
 
-# CUDA torch first, then the rest
+# PyTorch >= 2.6 required (diffusers/accelerate use torch.accelerator).
+# Install CUDA wheels first and keep them out of requirements.txt so a
+# later pip install cannot overwrite them with a CPU build.
 RUN pip3 install --upgrade pip \
-    && pip3 install torch torchvision --index-url https://download.pytorch.org/whl/cu121 \
-    && pip3 install -r /app/requirements.txt
+    && pip3 install \
+        torch==2.6.0 \
+        torchvision==0.21.0 \
+        --index-url https://download.pytorch.org/whl/cu124 \
+    && pip3 install -r /app/requirements.txt \
+    && python -c "import torch; assert hasattr(torch, 'accelerator'), torch.__version__; print('torch', torch.__version__, 'cuda', torch.version.cuda)"
 
 COPY src/ /app/src/
 COPY scripts/ /app/scripts/

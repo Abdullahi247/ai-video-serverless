@@ -1,6 +1,6 @@
 runpod>=1.7.0
-torch
-torchvision
+# torch / torchvision are installed in the Dockerfile from the CUDA index
+# (do not reinstall them here — that can overwrite the GPU build).
 diffusers>=0.32.0
 transformers>=4.46.0
 accelerate>=1.1.0
